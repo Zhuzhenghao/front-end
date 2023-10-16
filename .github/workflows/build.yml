@@ -1,25 +1,23 @@
-name: Build
-
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+# In this example, lint-format is a job among many others in a bigger GitHub workflow.
+# This job has 3 steps: Checking out the code, running the lint command, and running the formatting command.
 
 jobs:
-  build:
+  lint-format:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        node: [18]
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Install Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18
+      - name: Use Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
 
-    - name: Install dependencies
-      run: npm install
-
-    - name: Build
-      run: npm run build
+      - name: Install dependencies
+        run: yarn install
+        
+      - name: Run lint
+        run: |
+          yarn lint
