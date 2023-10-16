@@ -1,5 +1,12 @@
 # In this example, lint-format is a job among many others in a bigger GitHub workflow.
 # This job has 3 steps: Checking out the code, running the lint command, and running the formatting command.
+name: Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   lint-format:
