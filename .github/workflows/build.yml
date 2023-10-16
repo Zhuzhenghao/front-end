@@ -9,7 +9,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  lint-format:
+  lint-check:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -28,3 +28,20 @@ jobs:
       - name: Run lint
         run: |
           yarn lint
+
+  build:
+      runs-on: ubuntu-latest
+      strategy:
+        matrix:
+          node: [18]
+      needs: [lint-check]
+      steps:
+        - name: Checkout Commit
+          uses: actions/checkout@v3
+        - name: Use Node.js ${{ matrix.node }}
+          uses: actions/setup-node@v1
+          with:
+            node-version: ${{ matrix.node }}
+        - name: Run build
+          run: |
+            yarn build
